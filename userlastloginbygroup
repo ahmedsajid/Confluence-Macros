@@ -1,0 +1,60 @@
+## Macro title: Last Login by Group
+## Macro has a body: Y
+##
+## Developed by: https://answers.atlassian.com/questions/33385/macro-that-produces-a-list-of-users-last-login-date
+## Date created: 25/11/2013
+## Updated by: Ahmed Sajid
+
+## @param group:title=Group|type=string|required=true|desc=The group you want to report on
+#set($containerManagerClass = $content.class.forName('com.atlassian.spring.container.ContainerManager'))
+#set($getInstanceMethod = $containerManagerClass.getDeclaredMethod('getInstance',null))
+#set($containerManager = $getInstanceMethod.invoke(null,null))
+#set($containerContext = $containerManager.containerContext)
+ 
+#set($loginManager = $containerContext.getComponent('loginManager'))
+#set($crowdService = $containerContext.getComponent('crowdService'))
+
+#set($group = $userAccessor.getGroup($paramgroup))
+#if($group)
+    #set($usernames = $userAccessor.getMemberNames($group))
+    #set($total=0)
+    <table class="confluenceTable">
+        <tr>
+            <th class="confluenceTh">User</th>
+            <th class="confluenceTh">Email</th>
+            <th class="confluenceTh">Last Successful Login Date</th>
+        <th class="confluenceTh">Creation Date</th>
+        </tr>
+        #foreach($username in $usernames)
+
+            #set($user = $userAccessor.getUser($username))
+            #set($crowdUser = $crowdService.getUser($user.name))
+
+                #if( !$userAccessor.isDeactivated($user))
+                    <tr>
+                    <td class="confluenceTd">#usernameLink($user.name)</td>
+                    <td class="confluenceTd">$user.email</td>
+                    <td class="confluenceTd">$action.dateFormatter.formatDateTime($loginManager.getLoginInfo($user).lastSuccessfulLoginDate)</td>
+                    <td class="confluenceTd">$action.dateFormatter.formatDateTime($crowdUser.createdDate)</td>
+                    </tr>
+                     #set( $total = $total+1 )
+                #end    
+                    #if( !$velocityHasNext ) 
+                        <tr>
+                        <td class="confluenceTd"><b>Total Users</b></td>
+                        <td class="confluenceTd"></td>
+                        <td class="confluenceTd"></td>
+                        <td class="confluenceTd"><b>$total</b></td>
+                        </tr>
+                        </b>
+                    #end
+
+        #end
+
+    </table>
+
+#else
+
+    <p><i>No group with name "$paramgroup" found!</i></p>
+
+#end
