@@ -1,0 +1,14 @@
+## Macro title: Swagger Macro
+## Macro has a body: Y or N
+## Body processing: Selected body processing option
+## Output: Selected output option
+##
+## Developed by: Ahmed Sajid
+## Date created: 08/08/2017
+## Installed by: Ahmed Sajid
+
+## This macro renders JSON Swager Document hosted at the URL 
+## @param URL:title=URL|type=string|required=true|desc=URL To Swagger JSON File
+
+<redoc spec-url='$paramURL' hide-hostname="true" suppress-warnings="true"></redoc>
+<script src="https://rebilly.github.io/ReDoc/releases/latest/redoc.min.js"> </script>
