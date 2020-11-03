@@ -1,0 +1,23 @@
+## Macro title: Copy to clipboard panel
+## Macro has a body: Y
+##
+## Date created: 03/11/2020
+## Updated by: Ahmed Sajid
+
+## This is an example macro
+## @param Text:title=Text|type=string|required=true
+## Used W3C code https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_copy_clipboard
+
+
+<input type="text" value="$paramText" id="myInput" readonly style="width:400px;overflow:auto;color:black;">
+<button onclick="myFunction()">Copy to Clipboard</button>
+
+<script>
+function myFunction() {
+  var copyText = document.getElementById("myInput");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999)
+  document.execCommand("copy");
+  alert("Copied to Clipboard!");
+}
+</script>
